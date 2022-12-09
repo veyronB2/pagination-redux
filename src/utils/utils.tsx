@@ -2,17 +2,10 @@ import { Repo } from "../redux/state/types";
 import axios from "axios";
 const RESOURCE_URL = "https://api.github.com/repositories";
 
-// const fetchOwnerDetails = (repoId: string, url: string) => {
-//   return new Promise(async (resolve, reject) => {
-//     const data = await fetch(url);
-//     resolve({ [repoId]: data.json() });
-//   });
-// };
-
 export const fetchAllRepos = async (url = RESOURCE_URL) => {
   const response = await axios.get(url, {
     headers: {
-      Authorization: "token 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",
+      Authorization: "token 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",
     },
   });
   const results = response.data;

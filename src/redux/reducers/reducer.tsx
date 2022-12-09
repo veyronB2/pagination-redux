@@ -25,11 +25,11 @@ const reducer = (state = INITIAL_STATE, action: Action): UIState => {
   return actionMapping[action.type] ? actionMapping[action.type]() : state;
 
   function initiateAllRepos() {
-    const { allRepos, currentPage, rowsPerPage } = payload;
+    const { allRepos } = payload;
     return {
       ...state,
-      allRepos: allRepos || [],
-      filteredRepos: allRepos || [],
+      allRepos: allRepos || INITIAL_STATE.allRepos,
+      filteredRepos: allRepos || INITIAL_STATE.allRepos,
     };
   }
 
@@ -37,13 +37,14 @@ const reducer = (state = INITIAL_STATE, action: Action): UIState => {
     const { allRepos, currentPage, rowsPerPage, filter } = payload;
     return {
       ...state,
-      filter: filter || "",
+      filter: filter || INITIAL_STATE.filter,
       filteredRepos: GetFilteredRepos(
-        currentPage || 1,
+        currentPage || INITIAL_STATE.currentPage,
         rowsPerPage,
         filter || "",
-        allRepos || []
+        allRepos || INITIAL_STATE.allRepos
       ),
+      currentPage: INITIAL_STATE.currentPage,
     };
   }
 
@@ -53,8 +54,8 @@ const reducer = (state = INITIAL_STATE, action: Action): UIState => {
     return {
       ...state,
       paginatedRepos: getPaginatedResults({
-        filteredRepos: filteredRepos || [],
-        currentPage: currentPage || 1,
+        filteredRepos: filteredRepos || INITIAL_STATE.allRepos,
+        currentPage: currentPage || INITIAL_STATE.currentPage,
         rowsPerPage: rowsPerPage,
       }),
     };
@@ -66,7 +67,6 @@ const reducer = (state = INITIAL_STATE, action: Action): UIState => {
     };
   }
 
-  // GetFilteredRepos
   function filterRepos(): UIState {
     return {
       ...state,
@@ -78,14 +78,14 @@ const reducer = (state = INITIAL_STATE, action: Action): UIState => {
     return {
       ...state,
       rowsPerPage: payload.rowsPerPage,
-      currentPage: payload.currentPage || 1,
+      currentPage: payload.currentPage || INITIAL_STATE.currentPage,
     };
   }
 
   function currentPage(): UIState {
     return {
       ...state,
-      currentPage: payload.currentPage || 1,
+      currentPage: payload.currentPage || INITIAL_STATE.currentPage,
     };
   }
 
