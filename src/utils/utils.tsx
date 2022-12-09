@@ -1,74 +1,59 @@
 import { Repo } from "../redux/state/types";
+import axios from "axios";
 const RESOURCE_URL = "https://api.github.com/repositories";
 
-const fetchOwnerDetails = (repoId: string, url: string) => {
-  return new Promise(async (resolve, reject) => {
-    const data = await fetch(url);
-    resolve({ [repoId]: data.json() });
-  });
-};
+// const fetchOwnerDetails = (repoId: string, url: string) => {
+//   return new Promise(async (resolve, reject) => {
+//     const data = await fetch(url);
+//     resolve({ [repoId]: data.json() });
+//   });
+// };
 
 export const fetchAllRepos = async (url = RESOURCE_URL) => {
-  try {
-    const response = await fetch(url, {
-      headers: {
-        Authorization: "token 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",
-      },
-    });
-    const repos = await response.json();
-
-    const promises = repos.map((repo: any) =>
-      fetchOwnerDetails(repo.id, repo.owner.url)
-    );
-
-    const data = await Promise.all(promises);
-
-    console.log({ data });
-
-    return repos;
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: "token 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",
+    },
+  });
+  const results = response.data;
+  return results;
 };
 
 type PaginationProps = {
-  allRepos?: Repo[];
-  initialRowsPerPage?: number;
+  filteredRepos: Repo[];
   currentPage: number;
   rowsPerPage: number;
+  initialRowsPerPage?: number;
 };
 
 export function getPaginatedResults({
-  allRepos = [],
+  filteredRepos,
   currentPage,
   rowsPerPage,
 }: PaginationProps) {
-  const startIndex = rowsPerPage * (currentPage - 1);
-  const endIndex = startIndex + rowsPerPage;
+  if (filteredRepos.length > 10) {
+    const startIndex = rowsPerPage * (currentPage - 1);
+    const endIndex = startIndex + rowsPerPage;
 
-  return allRepos?.slice(startIndex, endIndex);
+    return filteredRepos?.slice(startIndex, endIndex);
+  } else {
+    return filteredRepos;
+  }
 }
 
 export const GetFilteredRepos = (
-  allRepos: Repo[],
   currentPage: number,
   rowsPerPage: number,
-  filter: string
+  filter: string,
+  allRepos: Repo[]
 ) => {
-  const paginatedData = getPaginatedResults({
-    allRepos: allRepos,
-    rowsPerPage: rowsPerPage,
-    currentPage: currentPage,
-  });
-
-  function filterByValue(array: Repo[], filter: string) {
-    return array.filter(
+  function filterByValue(repos: Repo[], filter: string) {
+    return repos.filter(
       (data) =>
         JSON.stringify(data).toLowerCase().indexOf(filter.toLowerCase()) !== -1
     );
   }
-
-  return filterByValue(paginatedData, filter);
+  return filterByValue(allRepos, filter);
 };
 
 export const calculatePagination = (

@@ -11,13 +11,10 @@ export type Repo = {
   };
 };
 
-export type Owner = {
-  url: string;
-  avatar_url: string;
-};
-
 export type UIState = {
+  filter: string;
   filteredRepos: Repo[];
+  paginatedRepos: Repo[];
   allRepos: Repo[];
   currentPage: number;
   rowsPerPage: number;
@@ -32,6 +29,7 @@ export type Action = {
 export type Payload = {
   filter?: string;
   allRepos?: Repo[];
+  filteredRepos?: Repo[];
   currentPage?: number;
   rowsPerPage: number;
 };

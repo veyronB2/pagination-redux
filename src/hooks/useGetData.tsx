@@ -19,6 +19,7 @@ export const useGetData = () => {
 
   const fetchData = async () => {
     const allRepos = await fetchAllRepos();
+
     setState({ data: allRepos, loading: false });
   };
 
