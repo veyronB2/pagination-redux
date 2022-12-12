@@ -2,7 +2,6 @@ import { screen, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../components/styled-components/theme";
-
 import Table from "../../components/Table";
 
 const renderComponent = (component: JSX.Element) => {

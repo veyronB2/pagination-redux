@@ -86,9 +86,9 @@ function App() {
     [dispatch]
   );
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  // useEffect(() => {
+  //   console.log(state);
+  // }, [state]);
 
   return (
     <ThemeProvider theme={theme}>
